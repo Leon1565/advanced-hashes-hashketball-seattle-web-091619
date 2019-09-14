@@ -186,7 +186,7 @@ def player_stats(name)
   end
 end
 
-def bog_shoe_rebounds
+def big_shoe_rebounds
   player_name = ""
   shoe_size = 0
   hash.each do |location, attributes|
