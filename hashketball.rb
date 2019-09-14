@@ -114,59 +114,55 @@ def game_hash
     }
   }
 end
-
+  
 def num_points_scored(name)
-  game_hash.each do |location, team_data|
-    team_data.each do |attribute, data|
-      if data.include?(name)
-        return game_hash[location][attribute][name][:points]
+  hash = game_hash
+  hash.each do |location, info| 
+    info.each do |attribute, stuff| 
+      if stuff.include?(name) 
+       return hash[location][attribute][name][:points]
       end
     end
   end
 end
 
-def shoe_size(name)
-  game_hash.each do |location, team_data|
-    team_data.each do |attribute, data|
-      if data.include?(name)
-        return game_hash[location][attribute][name][:shoe]
-      end
-    end
-  end
-end
-
-def team_colors(team_name)
-  game_hash.each do |location, attributes|
-    if game_hash[location].values.include?(team_name)
-      attributes.each do |attribute, info|
-        if attribute === :colors
-          return info
-      end
-    end
-  end
-end
-
-def team_name
+def team_names
+  hash = game_hash
   array = []
-  game_hash.each do |location, attributes|
+  hash.each do |location, attributes|
     attributes.each do |attribute, info|
-      if attribute === :team_name
-        array << info #Add to the end of this array
+      if attribute == :team_name
+        array << info
       end
     end
   end
   return array
 end
 
-def player_numbers(team_name)
+def team_colors(team_name)
+  hash = game_hash
   array = []
-  game_hash.each do |location, attributes|
-    if game_hash[location].values.include?(team_name)
+  hash.each do |location, attributes|
+    if hash[location].values.include?(team_name)
       attributes.each do |attribute, info|
-        if info.class === Hash
+        if attribute == :colors
+          return info
+        end
+      end
+    end
+  end
+end
+
+def player_numbers(team_name)
+  hash = game_hash
+  array = []
+  hash.each do |location, attributes|
+    if hash[location].values.include?(team_name)
+      attributes.each do |attribute, info|
+        if info.class == Hash
           info.each do |player, stats|
             stats.each do |stat, int|
-              if stat === :number
+              if stat == :number
                 array << int.to_i
               end
             end
@@ -178,32 +174,37 @@ def player_numbers(team_name)
   return array
 end
 
+
+
 def player_stats(name)
-  game_hash.each do |attribute, info|
-    if info.include?(name)
-      return game_hash[location][attribute][name]
+  hash = game_hash
+  hash.each do |location, attributes| 
+    attributes.each do |attribute, info| 
+      if info.include?(name) 
+       return hash[location][attribute][name]
+      end
     end
   end
 end
 
 def big_shoe_rebounds
+  hash = game_hash
   player_name = ""
   shoe_size = 0
-  game_hash.each do |location, attributes|
+  hash.each do |location, attributes|
     attributes.each do |attribute, info|
       if info.class == Hash
         info.each do |player, stats|
-          stats.each do |stat, int|
-            if stat == :shoe
-              if int > shoe_size
-                shoe_size = int
-                player_name = player
+            stats.each do |stat, int|
+              if stat == :shoe
+                if int > shoe_size
+                  shoe_size = int
+                  player_name = player
+                end
               end
             end
           end
-        end
-        return hash[location][attribute][player_name]
-        [:rebounds]
+        return hash[location][attribute][player_name][:rebounds]
       end
     end
   end
